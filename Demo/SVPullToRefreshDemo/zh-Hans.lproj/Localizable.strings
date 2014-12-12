@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  SVPullToRefreshDemo
+
+  Created by lujie on 14/12/12.
+  Copyright (c) 2014年 Home. All rights reserved.
+*/
+
+"Pull to refresh..." = "下拉刷新";
+"Release to refresh..." = "释放刷新";
+"Loading..." = "";
+"Last Updated: %@" = "最后更新时间: %@";
+"Never" = "未加载";

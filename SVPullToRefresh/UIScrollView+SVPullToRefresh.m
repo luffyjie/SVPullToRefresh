@@ -218,11 +218,10 @@ static char UIScrollViewPullToRefreshView;
     
     id customView = [self.viewForState objectAtIndex:self.state];
     BOOL hasCustomView = [customView isKindOfClass:[UIView class]];
-    
     self.titleLabel.hidden = hasCustomView;
     self.subtitleLabel.hidden = hasCustomView;
     self.arrow.hidden = hasCustomView;
-    
+    self.arrow.hidden = YES;
     if(hasCustomView) {
         [self addSubview:customView];
         CGRect viewBounds = [customView bounds];
@@ -271,24 +270,29 @@ static char UIScrollViewPullToRefreshView;
         
         CGFloat leftViewWidth = MAX(self.arrow.bounds.size.width,self.activityIndicatorView.bounds.size.width);
         
-        CGFloat margin = 10;
-        CGFloat marginY = 2;
+        CGFloat margin = -23;
+        CGFloat marginY = 0;
         CGFloat labelMaxWidth = self.bounds.size.width - margin - leftViewWidth;
         
         self.titleLabel.text = [self.titles objectAtIndex:self.state];
         
         NSString *subtitle = [self.subtitles objectAtIndex:self.state];
         self.subtitleLabel.text = subtitle.length > 0 ? subtitle : nil;
+
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+        paragraphStyle.lineBreakMode = self.titleLabel.lineBreakMode;
+        NSDictionary *attributes = @{NSFontAttributeName:self.titleLabel.font,
+                                     NSParagraphStyleAttributeName:paragraphStyle.copy};
+        
+        CGSize titleSize = [self.titleLabel.text boundingRectWithSize:CGSizeMake(labelMaxWidth, self.titleLabel.font.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
         
         
-        CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font
-                                            constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight)
-                                                lineBreakMode:self.titleLabel.lineBreakMode];
+        NSMutableParagraphStyle *paragraphStyle2 = [[NSMutableParagraphStyle alloc]init];
+        paragraphStyle.lineBreakMode = self.subtitleLabel.lineBreakMode;
+        NSDictionary *attributes2 = @{NSFontAttributeName:self.subtitleLabel.font,
+                                     NSParagraphStyleAttributeName:paragraphStyle2.copy};
         
-        
-        CGSize subtitleSize = [self.subtitleLabel.text sizeWithFont:self.subtitleLabel.font
-                                                  constrainedToSize:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight)
-                                                      lineBreakMode:self.subtitleLabel.lineBreakMode];
+        CGSize subtitleSize = [self.subtitleLabel.text boundingRectWithSize:CGSizeMake(labelMaxWidth, self.subtitleLabel.font.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes2 context:nil].size;
         
         CGFloat maxLabelWidth = MAX(titleSize.width,subtitleSize.width);
         
